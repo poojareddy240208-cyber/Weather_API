@@ -1,3 +1,8 @@
+import sys
+
+print(sys.executable)
+print(sys.version)
+
 import os
 from urllib import response
 
