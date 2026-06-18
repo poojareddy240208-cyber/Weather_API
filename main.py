@@ -14,18 +14,22 @@ from logger_config import logger
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-
     redis = Redis(
         host="localhost",
         port=6379,
-        db=0
+        db=0,
+        decode_responses=True
     )
 
     await FastAPILimiter.init(redis)
 
+    logger.info("FastAPI Limiter initialized")
+
     yield
 
-    await redis.close()
+    await redis.aclose()
+
+    logger.info("Redis connection closed")
 
 
 app = FastAPI(
@@ -41,36 +45,46 @@ app = FastAPI(
     response_model=WeatherResponse,
     dependencies=[Depends(RateLimiter(times=5, seconds=60))]
 )
-def weather(city: str):
-    return get_weather(city)
+async def weather(city: str):
+    """
+    Get weather data for a city.
+    Limited to 5 requests per minute per IP.
+    """
+    return await get_weather(city)
 
 
 @app.get("/health")
-def health():
+async def health():
+    """
+    Health check endpoint.
+    """
     return {
         "status": "healthy"
     }
 
 
 @app.get("/cache")
-def view_cache_keys():
+async def view_cache_keys():
+    """
+    View all cached weather keys.
+    """
 
-    keys = r.keys("weather:*")
+    keys = await r.keys("weather:*")
 
     return {
-        "keys": [
-            key.decode() if isinstance(key, bytes) else key
-            for key in keys
-        ]
+        "keys": keys
     }
 
 
 @app.delete("/cache/{city}")
-def clear_city_cache(city: str):
+async def clear_city_cache(city: str):
+    """
+    Delete cache for a specific city.
+    """
 
     cache_key = f"weather:{city.lower()}"
 
-    deleted = r.delete(cache_key)
+    deleted = await r.delete(cache_key)
 
     logger.info(f"Cache deleted for city={city}")
 
@@ -81,9 +95,12 @@ def clear_city_cache(city: str):
 
 
 @app.delete("/cache")
-def clear_all_cache():
+async def clear_all_cache():
+    """
+    Flush entire Redis database.
+    """
 
-    r.flushdb()
+    await r.flushdb()
 
     logger.warning("Entire Redis cache flushed")
 

@@ -1,6 +1,6 @@
 import os
 import json
-import requests
+import httpx
 
 from dotenv import load_dotenv
 from redis_client import r
@@ -13,11 +13,11 @@ API_KEY = os.getenv("OPENWEATHER_API_KEY")
 BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 
 
-def get_weather(city: str):
+async def get_weather(city: str):
 
     cache_key = f"weather:{city.lower()}"
 
-    cached_data = r.get(cache_key)
+    cached_data = await r.get(cache_key)
 
     if cached_data:
         logger.info(f"CACHE HIT for city={city}")
@@ -30,14 +30,17 @@ def get_weather(city: str):
         "appid": API_KEY,
         "units": "metric"
     }
+
     logger.info(f"Fetching weather from OpenWeather for city={city}")
 
     try:
-        response = requests.get(
-            BASE_URL,
-            params=params,
-            timeout=7
-        )
+
+        async with httpx.AsyncClient(timeout=7.0) as client:
+
+            response = await client.get(
+                BASE_URL,
+                params=params
+            )
 
         if response.status_code == 200:
 
@@ -49,16 +52,20 @@ def get_weather(city: str):
                 "condition": weather_data["weather"][0]["description"]
             }
 
-            r.setex(
+            await r.setex(
                 cache_key,
                 300,
                 json.dumps(result)
             )
+
             logger.info(f"Cached weather data for city={city}")
 
             return result
 
         elif response.status_code == 404:
+
+            logger.warning(f"City not found: {city}")
+
             return {
                 "city": city,
                 "temperature": 0,
@@ -66,11 +73,18 @@ def get_weather(city: str):
             }
 
         elif response.status_code == 401:
+
+            logger.error("Invalid OpenWeather API key")
+
             return {
                 "city": city,
                 "temperature": 0,
                 "condition": "Invalid API key"
             }
+
+        logger.error(
+            f"OpenWeather returned status code {response.status_code}"
+        )
 
         return {
             "city": city,
@@ -78,14 +92,20 @@ def get_weather(city: str):
             "condition": f"Error {response.status_code}"
         }
 
-    except requests.exceptions.Timeout:
+    except httpx.TimeoutException:
+
+        logger.error(f"Timeout while fetching weather for city={city}")
+
         return {
             "city": city,
             "temperature": 0,
             "condition": "Request timed out"
         }
 
-    except requests.exceptions.RequestException as e:
+    except httpx.RequestError as e:
+
+        logger.error(f"Request failed: {e}")
+
         return {
             "city": city,
             "temperature": 0,

@@ -1,0 +1,112 @@
+2026-06-18 14:13:19,779 - INFO - FastAPI Limiter initialized
+2026-06-18 14:14:38,587 - DEBUG - Failed to enable maintenance notifications: unknown subcommand 'MAINT_NOTIFICATIONS'. Try CLIENT HELP.
+2026-06-18 14:15:48,039 - INFO - Redis connection closed
+2026-06-18 14:16:02,722 - INFO - FastAPI Limiter initialized
+2026-06-18 14:16:02,894 - INFO - Redis connection closed
+2026-06-18 14:17:52,221 - INFO - FastAPI Limiter initialized
+2026-06-18 14:18:24,916 - INFO - CACHE MISS for city=Hyderabad
+2026-06-18 14:18:24,917 - INFO - Fetching weather from OpenWeather for city=Hyderabad
+2026-06-18 14:18:25,480 - DEBUG - connect_tcp.started host='api.openweathermap.org' port=443 local_address=None timeout=7.0 socket_options=None
+2026-06-18 14:18:25,534 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000002966A8AAE40>
+2026-06-18 14:18:25,535 - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x000002966A87BF50> server_hostname='api.openweathermap.org' timeout=7.0
+2026-06-18 14:18:25,577 - DEBUG - start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000002966A832850>
+2026-06-18 14:18:25,578 - DEBUG - send_request_headers.started request=<Request [b'GET']>
+2026-06-18 14:18:25,579 - DEBUG - send_request_headers.complete
+2026-06-18 14:18:25,580 - DEBUG - send_request_body.started request=<Request [b'GET']>
+2026-06-18 14:18:25,580 - DEBUG - send_request_body.complete
+2026-06-18 14:18:25,581 - DEBUG - receive_response_headers.started request=<Request [b'GET']>
+2026-06-18 14:18:25,606 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Thu, 18 Jun 2026 08:48:20 GMT'), (b'Content-Type', b'application/json; charset=utf-8'), (b'Content-Length', b'500'), (b'Connection', b'keep-alive'), (b'X-Cache-Key', b'/data/2.5/weather?q=hyderabad&units=metric'), (b'Access-Control-Allow-Origin', b'*'), (b'Access-Control-Allow-Credentials', b'true'), (b'Access-Control-Allow-Methods', b'GET, POST')])
+2026-06-18 14:18:25,608 - INFO - HTTP Request: GET https://api.openweathermap.org/data/2.5/weather?q=Hyderabad&appid=797c9f8259b0adcdc50d5353b81f17f2&units=metric "HTTP/1.1 200 OK"
+2026-06-18 14:18:25,608 - DEBUG - receive_response_body.started request=<Request [b'GET']>
+2026-06-18 14:18:25,609 - DEBUG - receive_response_body.complete
+2026-06-18 14:18:25,610 - DEBUG - response_closed.started
+2026-06-18 14:18:25,610 - DEBUG - response_closed.complete
+2026-06-18 14:18:25,611 - DEBUG - close.started
+2026-06-18 14:18:25,612 - DEBUG - close.complete
+2026-06-18 14:18:25,614 - INFO - Cached weather data for city=Hyderabad
+2026-06-18 14:19:20,874 - INFO - CACHE MISS for city=Chennai
+2026-06-18 14:19:20,874 - INFO - Fetching weather from OpenWeather for city=Chennai
+2026-06-18 14:19:21,333 - DEBUG - connect_tcp.started host='api.openweathermap.org' port=443 local_address=None timeout=7.0 socket_options=None
+2026-06-18 14:19:21,369 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000002966BCF0B90>
+2026-06-18 14:19:21,369 - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x000002966A8E8320> server_hostname='api.openweathermap.org' timeout=7.0
+2026-06-18 14:19:21,404 - DEBUG - start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000002966A8F90F0>
+2026-06-18 14:19:21,405 - DEBUG - send_request_headers.started request=<Request [b'GET']>
+2026-06-18 14:19:21,406 - DEBUG - send_request_headers.complete
+2026-06-18 14:19:21,406 - DEBUG - send_request_body.started request=<Request [b'GET']>
+2026-06-18 14:19:21,407 - DEBUG - send_request_body.complete
+2026-06-18 14:19:21,407 - DEBUG - receive_response_headers.started request=<Request [b'GET']>
+2026-06-18 14:19:21,434 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Thu, 18 Jun 2026 08:49:16 GMT'), (b'Content-Type', b'application/json; charset=utf-8'), (b'Content-Length', b'524'), (b'Connection', b'keep-alive'), (b'X-Cache-Key', b'/data/2.5/weather?q=chennai&units=metric'), (b'Access-Control-Allow-Origin', b'*'), (b'Access-Control-Allow-Credentials', b'true'), (b'Access-Control-Allow-Methods', b'GET, POST')])
+2026-06-18 14:19:21,435 - INFO - HTTP Request: GET https://api.openweathermap.org/data/2.5/weather?q=Chennai&appid=797c9f8259b0adcdc50d5353b81f17f2&units=metric "HTTP/1.1 200 OK"
+2026-06-18 14:19:21,436 - DEBUG - receive_response_body.started request=<Request [b'GET']>
+2026-06-18 14:19:21,436 - DEBUG - receive_response_body.complete
+2026-06-18 14:19:21,438 - DEBUG - response_closed.started
+2026-06-18 14:19:21,438 - DEBUG - response_closed.complete
+2026-06-18 14:19:21,440 - DEBUG - close.started
+2026-06-18 14:19:21,441 - DEBUG - close.complete
+2026-06-18 14:19:21,443 - INFO - Cached weather data for city=Chennai
+2026-06-18 14:20:17,293 - INFO - CACHE MISS for city=mumbai
+2026-06-18 14:20:17,294 - INFO - Fetching weather from OpenWeather for city=mumbai
+2026-06-18 14:20:17,588 - DEBUG - connect_tcp.started host='api.openweathermap.org' port=443 local_address=None timeout=7.0 socket_options=None
+2026-06-18 14:20:17,620 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000002966A8F89D0>
+2026-06-18 14:20:17,621 - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x000002966A7830B0> server_hostname='api.openweathermap.org' timeout=7.0
+2026-06-18 14:20:17,651 - DEBUG - start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000002966A900950>
+2026-06-18 14:20:17,652 - DEBUG - send_request_headers.started request=<Request [b'GET']>
+2026-06-18 14:20:17,653 - DEBUG - send_request_headers.complete
+2026-06-18 14:20:17,653 - DEBUG - send_request_body.started request=<Request [b'GET']>
+2026-06-18 14:20:17,654 - DEBUG - send_request_body.complete
+2026-06-18 14:20:17,654 - DEBUG - receive_response_headers.started request=<Request [b'GET']>
+2026-06-18 14:20:17,681 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Thu, 18 Jun 2026 08:50:12 GMT'), (b'Content-Type', b'application/json; charset=utf-8'), (b'Content-Length', b'492'), (b'Connection', b'keep-alive'), (b'X-Cache-Key', b'/data/2.5/weather?q=mumbai&units=metric'), (b'Access-Control-Allow-Origin', b'*'), (b'Access-Control-Allow-Credentials', b'true'), (b'Access-Control-Allow-Methods', b'GET, POST')])
+2026-06-18 14:20:17,681 - INFO - HTTP Request: GET https://api.openweathermap.org/data/2.5/weather?q=mumbai&appid=797c9f8259b0adcdc50d5353b81f17f2&units=metric "HTTP/1.1 200 OK"
+2026-06-18 14:20:17,682 - DEBUG - receive_response_body.started request=<Request [b'GET']>
+2026-06-18 14:20:17,682 - DEBUG - receive_response_body.complete
+2026-06-18 14:20:17,683 - DEBUG - response_closed.started
+2026-06-18 14:20:17,683 - DEBUG - response_closed.complete
+2026-06-18 14:20:17,684 - DEBUG - close.started
+2026-06-18 14:20:17,684 - DEBUG - close.complete
+2026-06-18 14:20:17,686 - INFO - Cached weather data for city=mumbai
+2026-06-18 14:20:30,192 - INFO - CACHE HIT for city=hyderabad
+2026-06-18 14:21:30,812 - INFO - Cache deleted for city=mumbai
+2026-06-18 14:21:34,636 - INFO - Cache deleted for city=mumbai
+2026-06-18 14:21:51,863 - INFO - CACHE MISS for city=mumbai
+2026-06-18 14:21:51,863 - INFO - Fetching weather from OpenWeather for city=mumbai
+2026-06-18 14:21:52,213 - DEBUG - connect_tcp.started host='api.openweathermap.org' port=443 local_address=None timeout=7.0 socket_options=None
+2026-06-18 14:21:52,247 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000002966A843AC0>
+2026-06-18 14:21:52,247 - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x000002966A8E8C20> server_hostname='api.openweathermap.org' timeout=7.0
+2026-06-18 14:21:52,281 - DEBUG - start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000002966A843BD0>
+2026-06-18 14:21:52,282 - DEBUG - send_request_headers.started request=<Request [b'GET']>
+2026-06-18 14:21:52,283 - DEBUG - send_request_headers.complete
+2026-06-18 14:21:52,283 - DEBUG - send_request_body.started request=<Request [b'GET']>
+2026-06-18 14:21:52,284 - DEBUG - send_request_body.complete
+2026-06-18 14:21:52,284 - DEBUG - receive_response_headers.started request=<Request [b'GET']>
+2026-06-18 14:21:52,310 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Thu, 18 Jun 2026 08:51:47 GMT'), (b'Content-Type', b'application/json; charset=utf-8'), (b'Content-Length', b'492'), (b'Connection', b'keep-alive'), (b'X-Cache-Key', b'/data/2.5/weather?q=mumbai&units=metric'), (b'Access-Control-Allow-Origin', b'*'), (b'Access-Control-Allow-Credentials', b'true'), (b'Access-Control-Allow-Methods', b'GET, POST')])
+2026-06-18 14:21:52,311 - INFO - HTTP Request: GET https://api.openweathermap.org/data/2.5/weather?q=mumbai&appid=797c9f8259b0adcdc50d5353b81f17f2&units=metric "HTTP/1.1 200 OK"
+2026-06-18 14:21:52,311 - DEBUG - receive_response_body.started request=<Request [b'GET']>
+2026-06-18 14:21:52,311 - DEBUG - receive_response_body.complete
+2026-06-18 14:21:52,312 - DEBUG - response_closed.started
+2026-06-18 14:21:52,312 - DEBUG - response_closed.complete
+2026-06-18 14:21:52,313 - DEBUG - close.started
+2026-06-18 14:21:52,314 - DEBUG - close.complete
+2026-06-18 14:21:52,315 - INFO - Cached weather data for city=mumbai
+2026-06-18 14:22:14,651 - WARNING - Entire Redis cache flushed
+2026-06-18 14:22:16,782 - WARNING - Entire Redis cache flushed
+2026-06-18 14:22:36,519 - INFO - CACHE MISS for city=mumbai
+2026-06-18 14:22:36,519 - INFO - Fetching weather from OpenWeather for city=mumbai
+2026-06-18 14:22:36,876 - DEBUG - connect_tcp.started host='api.openweathermap.org' port=443 local_address=None timeout=7.0 socket_options=None
+2026-06-18 14:22:36,909 - DEBUG - connect_tcp.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000002966A8DB650>
+2026-06-18 14:22:36,909 - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x000002966A8E9130> server_hostname='api.openweathermap.org' timeout=7.0
+2026-06-18 14:22:36,943 - DEBUG - start_tls.complete return_value=<httpcore._backends.anyio.AnyIOStream object at 0x000002966A8DB850>
+2026-06-18 14:22:36,944 - DEBUG - send_request_headers.started request=<Request [b'GET']>
+2026-06-18 14:22:36,944 - DEBUG - send_request_headers.complete
+2026-06-18 14:22:36,945 - DEBUG - send_request_body.started request=<Request [b'GET']>
+2026-06-18 14:22:36,945 - DEBUG - send_request_body.complete
+2026-06-18 14:22:36,946 - DEBUG - receive_response_headers.started request=<Request [b'GET']>
+2026-06-18 14:22:36,974 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Thu, 18 Jun 2026 08:52:32 GMT'), (b'Content-Type', b'application/json; charset=utf-8'), (b'Content-Length', b'492'), (b'Connection', b'keep-alive'), (b'X-Cache-Key', b'/data/2.5/weather?q=mumbai&units=metric'), (b'Access-Control-Allow-Origin', b'*'), (b'Access-Control-Allow-Credentials', b'true'), (b'Access-Control-Allow-Methods', b'GET, POST')])
+2026-06-18 14:22:36,975 - INFO - HTTP Request: GET https://api.openweathermap.org/data/2.5/weather?q=mumbai&appid=797c9f8259b0adcdc50d5353b81f17f2&units=metric "HTTP/1.1 200 OK"
+2026-06-18 14:22:36,975 - DEBUG - receive_response_body.started request=<Request [b'GET']>
+2026-06-18 14:22:36,976 - DEBUG - receive_response_body.complete
+2026-06-18 14:22:36,976 - DEBUG - response_closed.started
+2026-06-18 14:22:36,977 - DEBUG - response_closed.complete
+2026-06-18 14:22:36,978 - DEBUG - close.started
+2026-06-18 14:22:36,979 - DEBUG - close.complete
+2026-06-18 14:22:36,982 - INFO - Cached weather data for city=mumbai
+2026-06-18 14:25:13,657 - INFO - Redis connection closed
