@@ -3,6 +3,7 @@ import json
 import httpx
 
 from dotenv import load_dotenv
+
 from redis_client import r
 from logger_config import logger
 
@@ -17,6 +18,7 @@ async def get_weather(city: str):
 
     cache_key = f"weather:{city.lower()}"
 
+    # Check cache first
     cached_data = await r.get(cache_key)
 
     if cached_data:
@@ -34,9 +36,7 @@ async def get_weather(city: str):
     logger.info(f"Fetching weather from OpenWeather for city={city}")
 
     try:
-
         async with httpx.AsyncClient(timeout=7.0) as client:
-
             response = await client.get(
                 BASE_URL,
                 params=params
@@ -52,6 +52,7 @@ async def get_weather(city: str):
                 "condition": weather_data["weather"][0]["description"]
             }
 
+            # Cache for 5 minutes
             await r.setex(
                 cache_key,
                 300,
@@ -62,7 +63,7 @@ async def get_weather(city: str):
 
             return result
 
-        elif response.status_code == 404:
+        if response.status_code == 404:
 
             logger.warning(f"City not found: {city}")
 
@@ -72,7 +73,7 @@ async def get_weather(city: str):
                 "condition": "City not found"
             }
 
-        elif response.status_code == 401:
+        if response.status_code == 401:
 
             logger.error("Invalid OpenWeather API key")
 
@@ -109,5 +110,5 @@ async def get_weather(city: str):
         return {
             "city": city,
             "temperature": 0,
-            "condition": f"Request failed: {e}"
+            "condition": f"Request failed: {str(e)}"
         }

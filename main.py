@@ -15,7 +15,7 @@ from logger_config import logger
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     redis = Redis(
-        host="localhost",
+        host="redis",
         port=6379,
         db=0,
         decode_responses=True
