@@ -1,7 +1,6 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Depends
-from redis.asyncio import Redis
 
 from fastapi_limiter import FastAPILimiter
 from fastapi_limiter.depends import RateLimiter
@@ -14,20 +13,14 @@ from logger_config import logger
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    redis = Redis(
-        host="redis",
-        port=6379,
-        db=0,
-        decode_responses=True
-    )
 
-    await FastAPILimiter.init(redis)
+    await FastAPILimiter.init(r)
 
     logger.info("FastAPI Limiter initialized")
 
     yield
 
-    await redis.aclose()
+    await r.aclose()
 
     logger.info("Redis connection closed")
 
