@@ -1,326 +1,192 @@
 # Weather API
 
-A production-style Weather API built with FastAPI that fetches real-time weather data from OpenWeatherMap, caches responses using Redis, and protects endpoints with rate limiting.
+A production-ready Weather API built with FastAPI, Redis caching, rate limiting, Docker, and Render deployment.
+
+## Live Demo
+
+API Base URL:
+
+https://weather-api-eiee.onrender.com
+https://weather-api-eiee.onrender.com/docs
+
+Interactive API Documentation:
+
+https://weather-api-eiee.onrender.com/docs
+
+---
 
 ## Features
 
-- FastAPI-based REST API
-- Real-time weather data from OpenWeatherMap
-- Redis caching for improved performance
-- Redis-backed rate limiting
-- Dockerized deployment
-- Docker Compose setup
-- Health check endpoint
-- Logging support
-- Interactive Swagger API documentation
+* Fetch real-time weather data using OpenWeather API
+* Redis caching for improved performance
+* Rate limiting (5 requests per minute per IP)
+* Async FastAPI architecture
+* Dockerized application
+* Structured logging
+* Health check endpoint
+* Cache management endpoints
+* Render cloud deployment
 
 ---
 
 ## Tech Stack
 
-- Python 3.12
-- FastAPI
-- Redis
-- FastAPI Limiter
-- HTTPX
-- Docker
-- Docker Compose
-- OpenWeatherMap API
+* FastAPI
+* Redis / Render Key Value
+* FastAPI Limiter
+* Docker
+* OpenWeather API
+* Render
+* Python 3.12
 
 ---
 
-## Project Structure
+## Project Architecture
 
-```text
-Weather_API/
+Client
 │
-├── main.py                 # FastAPI application
-├── weather_api.py          # Weather service logic
-├── redis_client.py         # Redis connection
-├── schemas.py              # Response schemas
-├── logger_config.py        # Logging configuration
+▼
+FastAPI
 │
-├── Dockerfile
-├── docker-compose.yml
-├── requirements.txt
-├── .dockerignore
-├── .gitignore
+├── Redis Cache
 │
-└── README.md
-```
+└── OpenWeather API
 
 ---
 
 ## API Endpoints
 
-### Get Weather
+### Health Check
 
-```http
-GET /weather?city={city_name}
-```
-
-Example:
-
-```http
-GET /weather?city=Hyderabad
-```
+GET /health
 
 Response:
 
-```json
 {
-  "city": "Hyderabad",
-  "temperature": 31.2,
-  "condition": "clear sky"
+"status": "healthy"
 }
-```
 
 ---
 
-### Health Check
+### Get Weather
 
-```http
-GET /health
-```
+GET /weather?city=hyderabad
 
-Response:
+Example Response:
 
-```json
 {
-  "status": "healthy"
+"city": "Hyderabad",
+"temperature": 31.2,
+"condition": "clear sky"
 }
-```
 
 ---
 
 ### View Cached Keys
 
-```http
 GET /cache
-```
 
 ---
 
-### Delete Cache For City
+### Delete Cache For One City
 
-```http
 DELETE /cache/{city}
-```
 
 Example:
 
-```http
-DELETE /cache/Hyderabad
-```
+DELETE /cache/hyderabad
 
 ---
 
 ### Clear Entire Cache
 
-```http
 DELETE /cache
-```
-
----
-
-## Redis Caching
-
-The application caches weather responses for 5 minutes.
-
-### Cache Flow
-
-```text
-Client Request
-      │
-      ▼
-Check Redis Cache
-      │
- ┌────┴────┐
- │         │
-Hit       Miss
- │         │
- ▼         ▼
-Return   OpenWeather API
-Cached      │
-Data        ▼
-         Store in Redis
-              │
-              ▼
-         Return Response
-```
-
-Benefits:
-
-- Faster responses
-- Reduced API calls
-- Better scalability
 
 ---
 
 ## Rate Limiting
 
-The weather endpoint is protected using Redis-backed rate limiting.
+The weather endpoint is limited to:
 
-Current configuration:
+5 requests per minute per IP address
 
-```text
-5 requests per minute per IP
-```
+Exceeding the limit returns HTTP 429.
 
-Exceeding the limit returns:
+---
 
-```http
-429 Too Many Requests
-```
+## Environment Variables
+
+Create a .env file:
+
+OPENWEATHER_API_KEY=your_api_key
+REDIS_URL=redis://localhost:6379
 
 ---
 
 ## Local Setup
 
-### Clone Repository
+Clone the repository:
 
-```bash
-git clone <your-repository-url>
+git clone https://github.com/poojareddy240208-cyber/Weather_API.git
+
 cd Weather_API
-```
 
-### Create Virtual Environment
+Create a virtual environment:
 
-```bash
 python -m venv .venv
-```
 
-Activate:
+Activate it:
 
 Windows:
-
-```bash
 .venv\Scripts\activate
-```
 
-Linux/macOS:
+Install dependencies:
 
-```bash
-source .venv/bin/activate
-```
-
-### Install Dependencies
-
-```bash
 pip install -r requirements.txt
-```
 
-### Create .env
+Run Redis:
 
-```env
-OPENWEATHER_API_KEY=your_api_key_here
-```
+redis-server
 
-### Run Application
+Start FastAPI:
 
-```bash
 uvicorn main:app --reload
-```
-
-Visit:
-
-```text
-http://localhost:8000/docs
-```
 
 ---
 
-## Docker Setup
+## Docker
 
-### Build Containers
+Build image:
 
-```bash
-docker compose build
-```
+docker build -t weather-api .
 
-### Start Services
+Run container:
 
-```bash
-docker compose up
-```
-
-### Stop Services
-
-```bash
-docker compose down
-```
+docker run -p 8000:8000 weather-api
 
 ---
 
-## Swagger Documentation
+## Deployment
 
-FastAPI automatically generates interactive API documentation.
+The application is deployed on Render using:
 
-Swagger UI:
-
-```text
-http://localhost:8000/docs
-```
-
-ReDoc:
-
-```text
-http://localhost:8000/redoc
-```
-
----
-
-## Logging
-
-The application logs:
-
-- Cache hits
-- Cache misses
-- API requests
-- Errors
-- Redis events
-
-Example:
-
-```text
-INFO - CACHE MISS for city=Hyderabad
-INFO - Cached weather data for city=Hyderabad
-INFO - CACHE HIT for city=Hyderabad
-```
+* Docker Web Service
+* Render Key Value (Redis-compatible)
+* GitHub Auto Deploy
 
 ---
 
 ## Future Improvements
 
-- JWT Authentication
-- Role-Based Authorization
-- User Accounts
-- Request Analytics
-- Automated Testing (Pytest)
-- CI/CD Pipeline
-- Cloud Deployment
-- Monitoring & Metrics
-
----
-
-## Learning Outcomes
-
-This project demonstrates:
-
-- REST API development
-- FastAPI fundamentals
-- Asynchronous programming
-- Redis caching
-- Rate limiting
-- Docker containerization
-- API integration
-- Environment variable management
-- Backend system design
+* JWT Authentication
+* PostgreSQL Integration
+* User Accounts
+* Weather Forecast Endpoint
+* API Analytics Dashboard
+* CI/CD Pipeline with GitHub Actions
 
 ---
 
 ## Author
 
-**Pooja Reddy**
-
-Backend Development Project built using FastAPI, Redis, and Docker.
+Pooja Reddy
