@@ -7,6 +7,7 @@ A production-ready Weather API built with FastAPI, Redis caching, rate limiting,
 API Base URL:
 
 https://weather-api-eiee.onrender.com
+
 https://weather-api-eiee.onrender.com/docs
 
 Interactive API Documentation:
@@ -58,6 +59,7 @@ FastAPI
 
 ### Health Check
 https://weather-api-eiee.onrender.com/health
+
 GET /health
 
 Response:
@@ -70,6 +72,7 @@ Response:
 
 ### Get Weather
 https://weather-api-eiee.onrender.com/weather?city=hyderabad
+
 GET /weather?city=hyderabad
 
 Example Response:
@@ -84,13 +87,16 @@ Example Response:
 
 ### View Cached Keys
 https://weather-api-eiee.onrender.com/cache
+
 GET /cache
 
 ---
 
 ### Delete Cache For One City
 https://weather-api-eiee.onrender.com/cache/hyderabad
+
 DELETE 
+
 DELETE /cache/{city}
 
 Example:
@@ -101,7 +107,9 @@ DELETE /cache/hyderabad
 
 ### Clear Entire Cache
 https://weather-api-eiee.onrender.com/cache
+
 DELETE 
+
 DELETE /cache
 
 ---
