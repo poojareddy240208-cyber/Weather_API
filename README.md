@@ -1,4 +1,4 @@
-# Weather API 🚀
+# Weather API
 
 A production-style Weather API built with FastAPI that fetches real-time weather data from OpenWeatherMap, caches responses using Redis, and protects endpoints with rate limiting.
 
