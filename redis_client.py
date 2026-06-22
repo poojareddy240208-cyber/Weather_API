@@ -1,9 +1,12 @@
 import os
 from redis.asyncio import Redis
 
-r = Redis(
-    host=os.getenv("REDIS_HOST", "redis"),
-    port=int(os.getenv("REDIS_PORT", 6379)),
-    db=0,
+REDIS_URL = os.getenv("REDIS_URL")
+
+if not REDIS_URL:
+    raise ValueError("REDIS_URL environment variable is not set")
+
+r = Redis.from_url(
+    REDIS_URL,
     decode_responses=True
 )
