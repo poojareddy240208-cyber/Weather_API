@@ -45,12 +45,19 @@ https://weather-api-eiee.onrender.com/docs
 ## Project Architecture
 
 Client
+
 │
+
 ▼
+
 FastAPI
+
 │
+
 ├── Redis Cache
+
 │
+
 └── OpenWeather API
 
 ---
