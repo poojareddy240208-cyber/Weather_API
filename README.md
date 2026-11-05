@@ -1,209 +1,182 @@
 # Weather API
 
-A production-ready Weather API built with FastAPI, Redis caching, rate limiting, Docker, and Render deployment.
+A production-ready Weather API built with FastAPI, Redis caching, rate limiting, Docker, Kubernetes (Minikube), and Render cloud deployment.
 
-## Live Demo
+## Live Production Demo
 
-API Base URL:
-
-https://weather-api-eiee.onrender.com
-
-https://weather-api-eiee.onrender.com/docs
-
-Interactive API Documentation:
-
-https://weather-api-eiee.onrender.com/docs
+- **API Base URL:** https://weather-api-eiee.onrender.com
+- **Interactive API Documentation (Swagger):** https://weather-api-eiee.onrender.com/docs
+- **Health Check Endpoint:** https://weather-api-eiee.onrender.com/health
 
 ---
 
 ## Features
 
-* Fetch real-time weather data using OpenWeather API
-* Redis caching for improved performance
-* Rate limiting (5 requests per minute per IP)
-* Async FastAPI architecture
-* Dockerized application
-* Structured logging
-* Health check endpoint
-* Cache management endpoints
-* Render cloud deployment
+- **Real-time Weather Data:** Integrated with OpenWeatherMap API.
+- **Redis Caching:** Accelerates response times and minimizes external API calls.
+- **Rate Limiting:** IP-based rate limiting (5 requests per minute) to prevent abuse.
+- **Async Architecture:** High-throughput backend powered by FastAPI and Uvicorn.
+- **Containerization & Orchestration:** Fully dockerized with multi-replica local Kubernetes deployment.
+- **Self-Healing Infrastructure:** Kubernetes deployments configure liveness/readiness management, desired-state reconciliation, and secret management.
+- **Structured Logging:** Centralized application logging for monitoring and debugging.
 
 ---
 
 ## Tech Stack
 
-* FastAPI
-* Redis / Render Key Value
-* FastAPI Limiter
-* Docker
-* OpenWeather API
-* Render
-* Python 3.12
+- **Backend:** Python 3.12, FastAPI, Uvicorn, Pydantic
+- **Caching & Storage:** Redis (Render Key-Value in cloud, Redis 7 Alpine in local k8s)
+- **Rate Limiting:** FastAPI Limiter
+- **Containerization & Orchestration:** Docker, Docker Compose, Kubernetes (Minikube), `kubectl`
+- **Cloud & Deployment:** Render (PaaS Web Service)
+- **External Services:** OpenWeatherMap API
 
 ---
 
-## Project Architecture
+## Architecture Overview
 
-Client
+The system supports two independent deployment strategies:
 
-│
+### 1. Cloud Production Architecture (Render)
+```
+Client  ──►  Render Web Service (FastAPI Docker Container)  ──►  Render Key-Value (Redis)
+                                        │
+                                        ▼
+                               OpenWeatherMap API
+```
 
-▼
-
-FastAPI
-
-│
-
-├── Redis Cache
-
-│
-
-└── OpenWeather API
-
----
-
-## API Endpoints
-
-### Health Check
-https://weather-api-eiee.onrender.com/health
-
-GET /health
-
-Response:
-
-{
-"status": "healthy"
-}
+### 2. Local Kubernetes Architecture (Minikube)
+```
+                                ┌────────────────────────────────────────────────────────┐
+                                │ Kubernetes Cluster (weather-local namespace)           │
+                                │                                                        │
+Client ──► ClusterIP Service ──►│   ├── FastAPI Pod 1 ──┐                                │
+          (Port 8000/8001)      │   ├── FastAPI Pod 2   ├──► Redis Service ──► Redis Pod │
+                                │   └── FastAPI Pod N ──┘     (Port 6379)                │
+                                └────────────────────────────────────────────────────────┘
+```
 
 ---
 
-### Get Weather
-https://weather-api-eiee.onrender.com/weather?city=hyderabad
+## API Endpoints Summary
 
-GET /weather?city=hyderabad
-
-Example Response:
-
-{
-"city": "Hyderabad",
-"temperature": 31.2,
-"condition": "clear sky"
-}
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/health` | Application health check endpoint |
+| `GET` | `/weather?city={name}` | Retrieves live weather data for a city (cached & rate-limited) |
+| `GET` | `/cache` | Lists all active Redis cached keys |
+| `DELETE` | `/cache/{city}` | Purges cache entry for a specific city |
+| `DELETE` | `/cache` | Clears all cached weather data |
 
 ---
 
-### View Cached Keys
-https://weather-api-eiee.onrender.com/cache
+## Local Development & Docker Setup
 
-GET /cache
+### Prerequisites
+- Python 3.12+
+- Docker Engine & Docker Desktop
 
----
-
-### Delete Cache For One City
-https://weather-api-eiee.onrender.com/cache/hyderabad
-
-DELETE 
-
-DELETE /cache/{city}
-
-Example:
-
-DELETE /cache/hyderabad
-
----
-
-### Clear Entire Cache
-https://weather-api-eiee.onrender.com/cache
-
-DELETE 
-
-DELETE /cache
-
----
-
-## Rate Limiting
-
-The weather endpoint is limited to:
-
-5 requests per minute per IP address
-
-Exceeding the limit returns HTTP 429.
-
----
-
-## Environment Variables
-
-Create a .env file:
-
-OPENWEATHER_API_KEY=your_api_key
-REDIS_URL=redis://localhost:6379
-
----
-
-## Local Setup
-
-Clone the repository:
-
+### 1. Standard Python Virtual Environment
+```bash
+# Clone the repository
 git clone https://github.com/poojareddy240208-cyber/Weather_API.git
-
 cd Weather_API
 
-Create a virtual environment:
-
+# Create and activate virtual environment
 python -m venv .venv
-
-Activate it:
-
-Windows:
+# Windows:
 .venv\Scripts\activate
+# Linux/macOS:
+source .venv/bin/activate
 
-Install dependencies:
-
+# Install dependencies
 pip install -r requirements.txt
 
-Run Redis:
-
-redis-server
-
-Start FastAPI:
-
+# Run application locally
 uvicorn main:app --reload
+```
+
+### 2. Docker Compose Setup
+```bash
+# Start both FastAPI and Redis containers locally
+docker compose up --build
+```
 
 ---
 
-## Docker
+## Local Kubernetes (Minikube) Deployment
 
-Build image:
+The project includes declarative Kubernetes manifests in the `k8s/` directory for local container orchestration.
 
-docker build -t weather-api .
+### 1. Start Cluster & Create Namespace
+```bash
+minikube start --driver=docker
+kubectl create namespace weather-local
+kubectl config set-context --current --namespace=weather-local
+```
 
-Run container:
+### 2. Configure Secrets & Build Image
+```bash
+# Pass your OpenWeatherMap API key into Kubernetes Secret
+kubectl create secret generic weather-secrets --from-literal=OPENWEATHER_API_KEY="YOUR_ACTUAL_API_KEY"
 
-docker run -p 8000:8000 weather-api
+# Build image directly inside Minikube's Docker daemon
+minikube image build -t weather-api:1.0 .
+```
+
+### 3. Deploy Resources to Kubernetes
+```bash
+# Apply all Kubernetes manifests (ConfigMap, Deployments, Services)
+kubectl apply -f k8s/
+```
+
+### 4. Access Local Cluster & Scale
+```bash
+# Check pod status
+kubectl get pods
+
+# Forward service port to host machine
+kubectl port-forward service/weather-api 8001:8000
+
+# Open Swagger Docs in browser: http://localhost:8001/docs
+
+# Experiment with horizontal pod scaling
+kubectl scale deployment weather-api --replicas=4
+```
 
 ---
 
-## Deployment
+## Kubernetes Manifests Structure
 
-The application is deployed on Render using:
-
-* Docker Web Service
-* Render Key Value (Redis-compatible)
-* GitHub Auto Deploy
+```
+k8s/
+├── configmap.yaml       # Non-sensitive runtime environment variables (REDIS_URL, REDIS_HOST)
+├── api-deployment.yaml  # FastAPI workload deployment (2+ replicas, resource limits, health probes)
+├── api-service.yaml     # Internal ClusterIP load balancing for FastAPI Pods
+├── redis.yaml           # Single-instance Redis deployment and ClusterIP service
+└── hpa.yaml             # Horizontal Pod Autoscaler configuration (CPU-based auto-scaling)
+```
 
 ---
 
-## Future Improvements
+## Deployment Strategy
 
-* JWT Authentication
-* PostgreSQL Integration
-* User Accounts
-* Weather Forecast Endpoint
-* API Analytics Dashboard
-* CI/CD Pipeline with GitHub Actions
+- **Production:** Continuous deployment on **Render** triggered by commits to `fastapi-migration` branch.
+- **Local Sandbox:** Development, orchestration, auto-healing, and scaling tests managed independently via **Minikube**.
+
+---
+
+## Future Roadmap
+
+- [ ] Horizontal Pod Autoscaling (HPA) fine-tuning under load test scenarios.
+- [ ] Ingress Controller implementation for local domain routing.
+- [ ] Helm Chart packaging for dynamic multi-environment values.
+- [ ] CI/CD Pipeline automation using GitHub Actions.
+- [ ] JWT Authentication & PostgreSQL database integration.
 
 ---
 
 ## Author
 
-Pooja Reddy
+**Pooja Reddy**  
+- **GitHub:** [@poojareddy240208-cyber](https://github.com/poojareddy240208-cyber)
